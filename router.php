@@ -6,7 +6,6 @@
     * Autor: João Gabriel
     * Data: 04/03/2022
     * Versão: 1.0
-    *
     ***************************************************************************/
 
     $action = (string) null;
@@ -19,13 +18,19 @@
         // e qual ação será realizada
 
         $componente = strtoupper($_GET['componente']);
-        $action = $_GET['action'];
+        $action = strtoupper($_GET['action']);
         
         // Estrutura condicional para validar quem está solicitando algo para o Router
         switch($componente){
             case 'CONTATOS';
-                echo('Chamando a controller de contatos');
-        break;
+                // Import da controller contatos
+                require_once('./controller/controllerContatos.php');
+
+                if($action == 'INSERIR')
+                    inserirContato($_POST);
+                elseif($action == 'ATUALIZAR')
+                    atualizarContato($_POST);
+            break;
         }
     }
 

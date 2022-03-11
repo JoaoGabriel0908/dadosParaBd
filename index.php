@@ -12,6 +12,7 @@
                 <h1> Cadastro de Contatos </h1>           
             </div>
             <div id="cadastroInformacoes">
+            <!-- Enviando variaveis para o router -->
                 <form action="router.php?componente=contatos&action=inserir" name="frmCadastro" method="post" >
                     <div class="campos">
                         <div class="cadastroInformacoesPessoais">
