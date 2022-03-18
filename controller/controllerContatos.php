@@ -30,11 +30,16 @@ function inserirContato ($dadosContatos){
                 );
                 // Require do arquivo da model que faz a conexão direta com o BD
                 require_once('./model/bd/contato.php');
-                // Função que recebe o array e passa para o dadosContatos
-                insertContato($arrayDados);
+                // Chama a função que fará o insert do BD (esta função está na model)
+                if (insertContato($arrayDados))
+                    return true;
+                else
+                    return array('idErro' => 1, 
+                                 'message' => 'Não foi poosível inserir os bancos de Dados');
             }
         else
-            echo('Dados incompletos');
+            return array('idErro' =>2,
+                         'message' => 'Existem campos obrigatórios que não foram preenchidos.');
     }
 }
 
@@ -52,6 +57,16 @@ function excluirContato (){
 // encaminhar a lista de contatos para View
 function listarContato (){
 
+    // Import do arquivo que vai buscar os dados no BD
+    require_once('./model/bd/contato.php');
+
+    // Chama a função que vai buscar os dados no BD
+    $dados = selectAllContato();
+
+    if(!empty($dados))
+        return $dados;
+    else
+        return false;
 }
 
 ?>
