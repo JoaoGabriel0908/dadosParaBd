@@ -48,8 +48,34 @@ function insertContato($dadosContato){
 
 }
 // Função para realizar o update no BD
-function uptadeContato(){
+function uptadeContato($dadosContato){
 
+    $statusRepostas = (boolean) false;
+
+    // Abre a conexão com o BD
+    $conexao = conexaoMySql();
+
+    // Montando o script para enviar para o BD
+    $sql = "update tblcontatos set
+                nome           = '".$dadosContato['nome']."',
+                telefone       = '".$dadosContato['telefone']."',
+                celular        = '".$dadosContato['celular']."',
+                email          = '".$dadosContato['email']."',
+                obs            = '".$dadosContato['obs']."'
+
+            where idcontato =".$dadosContato['id'];
+             
+    // Comando que executa o script no banco de dados
+        // Validação para verificar se o script sql está correto 
+    if (mysqli_query($conexao, $sql)){
+        
+        // Validação para verificar se uma linha foi acrescentada no BD
+        if(mysqli_affected_rows($conexao))
+            $statusRepostas =  true;
+
+    fecharConexaoMysql($conexao);
+    return $statusRepostas;
+    }
 }
 // Função para excluir no BD
 function deleteContato($id){

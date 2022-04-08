@@ -1,4 +1,9 @@
 <?php
+// Essa variavel foi criada para diferenciar no action do formulário qual
+// a ação deveria ser levada para a router (inserir ou editar).
+// Nas condições abaixo mudamos o action da variacel para a ação de editar.
+$form = (string) "router.php?componente=contatos&action=inserir";
+
 // Valida se a utilização da variavel de sessão esta ativa no servidor
     if(session_status()){
         // Valida se a variavel de sessão dadosContato não esta vazia
@@ -9,6 +14,13 @@
             $celular        = $_SESSION['dadosContato']['celular'];
             $email          = $_SESSION['dadosContato']['email'];
             $obs            = $_SESSION['dadosContato']['obs'];
+
+            // Mudamos a ação do form para editar o registro no click do botão
+            // da ação salvar.
+            $form = "router.php?componente=contatos&action=editar&id=".$id;
+
+            // Destroi uma variavel da memoria do servidor
+            unset($_SESSION['dadosContato']);
         }
     }
 ?>
@@ -28,13 +40,13 @@
             </div>
             <div id="cadastroInformacoes">
             <!-- Enviando variaveis para o router -->
-                <form action="router.php?componente=contatos&action=inserir" name="frmCadastro" method="post" >
+                <form action="<?=$form?>" name="frmCadastro" method="post" >
                     <div class="campos">
                         <div class="cadastroInformacoesPessoais">
                             <label> Nome: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="text" name="txtNome" value="<?=$nome?>" placeholder="Digite seu Nome" maxlength="100">
+                            <input type="text" name="txtNome" value="<?= isset($nome)?$nome:null?>" placeholder="Digite seu Nome" maxlength="100">
                         </div>
                     </div>
                                      
@@ -43,7 +55,7 @@
                             <label> Telefone: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="tel" name="txtTelefone" value="<?=$telefone?>">
+                            <input type="tel" name="txtTelefone" value="<?= isset($telefone)?$telefone:null?>">
                         </div>
                     </div>
                     <div class="campos">
@@ -51,7 +63,7 @@
                             <label> Celular: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="tel" name="txtCelular" value="<?=$celular?>">
+                            <input type="tel" name="txtCelular" value="<?= isset($celular)?$celular:null?>">
                         </div>
                     </div>
                    
@@ -61,7 +73,7 @@
                             <label> Email: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="email" name="txtEmail" value="<?=$email?>">
+                            <input type="email" name="txtEmail" value="<?= isset($email)?$email:null?>">
                         </div>
                     </div>
                     <div class="campos">
@@ -69,9 +81,9 @@
                             <label> Observações: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <textarea name="txtObs" cols="50" rows="7"> <?=$obs?> </textarea>
+                            <textarea name="txtObs" cols="50" rows="7"><?=isset($obs)?$obs:null?></textarea>
                         </div>
-                    </div>
+                    </div> 
                     <div class="enviar">
                         <div class="enviar">
                             <input type="submit" name="btnEnviar" value="Salvar">
@@ -113,7 +125,7 @@
                     <td class="tblColunas registros">
                         <a href="router.php?componente=contatos&action=buscar&id=<?=$item['id']?>">
                             <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
-                        </a>   
+                        </a>
                         <a onclick="return confirm('Deseja realmente excluir este <?=$item['nome']?> contato?')" href="router.php?componente=contatos&action=deletar&id=<?=$item['id']?>">
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>

@@ -57,7 +57,7 @@
                             </script>");
 
 
-                            // Ação de deletar
+                // Ação de deletar
                 }elseif($action == 'DELETAR')
                 {
                         // Recebe o id do registro que deverá ser excluído,
@@ -111,6 +111,32 @@
                     // Assim não havendo um novo carregamento da página
                     require_once('index.php');
 
+                }elseif($action == 'EDITAR')
+                {
+                    // Recebe o id que foi encaminhado no action do form pela URL
+                    $idContato = $_GET['id'];
+
+                    // Chama a função de editar na controller 
+                    $resposta = atualizarContato($_POST, $idContato);
+
+                    // Valida o tipo de dado que retornou
+                    if(is_bool($resposta)) // Se for boleano:
+                    {
+                        // Verifica se o retorno foi verdadeiro
+                        if($resposta)
+
+                        echo(" <script>
+                                 alert('Registro atualizado com sucesso!');
+                                 window.location.href = 'index.php'; 
+                            </script> ");
+                        }
+
+                        // Se o retorno for array significa que houve um erro no processo de inserção
+                        elseif(is_array($resposta))
+                        echo("<script>
+                                alert('".$resposta['message']."');
+                                window.history.back();
+                            </script>");
                 }
             break;
         }
