@@ -8,7 +8,7 @@
 ***************************************************************/
 
 // Função para receber dados da View e encaminhar para a Model (Inserir)
-function inserirContato ($dadosContatos){
+function inserirContato ($dadosContatos, $file){
 
     // Validação para verificar se o objeto esta vazio 
     if(!empty($dadosContatos)){
@@ -17,6 +17,13 @@ function inserirContato ($dadosContatos){
         // celular e email, pois são campos obrigatórios no BD 
         if(!empty($dadosContatos['txtNome']) && !empty($dadosContatos['txtCelular']) && !empty($dadosContatos['txtEmail']))
             {
+                if($file != null)
+                {
+                    require_once('modulo/upload.php');
+                    $resultado = uploadFile($file['fleFoto']);
+                    echo($resultado);
+                    die;
+                }
                 // Criação do array de dados que será encaminhado a model
                 // para inserir no banco de dados, é importante
                 // criar este array conforme as necessidades de manipulação do BD
