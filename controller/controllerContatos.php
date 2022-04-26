@@ -10,6 +10,8 @@
 // Função para receber dados da View e encaminhar para a Model (Inserir)
 function inserirContato ($dadosContatos, $file){
 
+    $nomeFoto = (string) null;
+
     // Validação para verificar se o objeto esta vazio 
     if(!empty($dadosContatos)){
 
@@ -17,12 +19,22 @@ function inserirContato ($dadosContatos, $file){
         // celular e email, pois são campos obrigatórios no BD 
         if(!empty($dadosContatos['txtNome']) && !empty($dadosContatos['txtCelular']) && !empty($dadosContatos['txtEmail']))
             {
+                // Validação para identificar se chegou um arquivo para upload
                 if($file != null)
                 {
+                    // Import da função de upload
                     require_once('modulo/upload.php');
-                    $resultado = uploadFile($file['fleFoto']);
-                    echo($resultado);
-                    die;
+                    $nomeFoto = uploadFile($file['fleFoto']);
+
+                    // Chama a função de upload
+                    if(is_array($nomeFoto))
+                    {
+                        // Caso aconteça algum erro no processo de upload, a função irá retornar
+                        // um array com a possivel mensagem de erro. Esse array será retornado para
+                        // a router e ela irá exibir a mensagem na para o usuário
+                        return $nomeFoto;
+                    }
+    
                 }
                 // Criação do array de dados que será encaminhado a model
                 // para inserir no banco de dados, é importante
@@ -34,6 +46,7 @@ function inserirContato ($dadosContatos, $file){
                     "celular"       => $dadosContatos['txtCelular'],
                     "email"         => $dadosContatos['txtEmail'],
                     "obs"           => $dadosContatos['txtObs'],
+                    "foto"          => $nomeFoto
                 );
                 // Require do arquivo da model que faz a conexão direta com o BD
                 require_once('./model/bd/contato.php');

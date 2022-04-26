@@ -115,6 +115,7 @@ $form = (string) "router.php?componente=contatos&action=inserir";
                     <td class="tblColunas destaque"> Nome </td>
                     <td class="tblColunas destaque"> Celular </td>
                     <td class="tblColunas destaque"> Email </td>
+                    <td class="tblColunas destaque"> Foto </td>
                     <td class="tblColunas destaque"> Opções </td>
                 </tr>
                 
@@ -133,6 +134,7 @@ $form = (string) "router.php?componente=contatos&action=inserir";
                     <td class="tblColunas registros"><?=$item['nome']?></td>
                     <td class="tblColunas registros"><?=$item['celular']?></td>
                     <td class="tblColunas registros"><?=$item['email']?></td>
+                    <td class="tblColunas registros"><img src="arquivos/<?=$item['foto']?>" class="foto"></td>
                    
                     <td class="tblColunas registros">
                         <a href="router.php?componente=contatos&action=buscar&id=<?=$item['id']?>">
