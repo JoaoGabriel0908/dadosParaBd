@@ -36,7 +36,7 @@ $form = (string) "router.php?componente=contatos&action=inserir";
         
         <div id="cadastro"> 
             <div id="cadastroTitulo"> 
-                <h1> Cadastro de Contatos </h1>           
+                <h1> Cadastro de Contatos. </h1>           
             </div>
             <div id="cadastroInformacoes">
                 
