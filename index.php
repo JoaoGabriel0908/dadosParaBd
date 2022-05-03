@@ -1,8 +1,13 @@
 <?php
+// Import do arquivo de configuração do projeto
+require_once('modulo/config.php');
 // Essa variavel foi criada para diferenciar no action do formulário qual
 // a ação deveria ser levada para a router (inserir ou editar).
 // Nas condições abaixo mudamos o action da variacel para a ação de editar.
 $form = (string) "router.php?componente=contatos&action=inserir";
+
+// Variavel para carregar o nome da foto do banco de dados
+$foto = (string) null;
 
 // Valida se a utilização da variavel de sessão esta ativa no servidor
     if(session_status()){
@@ -14,10 +19,10 @@ $form = (string) "router.php?componente=contatos&action=inserir";
             $celular        = $_SESSION['dadosContato']['celular'];
             $email          = $_SESSION['dadosContato']['email'];
             $obs            = $_SESSION['dadosContato']['obs'];
-
+            $foto           = $_SESSION['dadosContato']['foto'];
             // Mudamos a ação do form para editar o registro no click do botão
             // da ação salvar.
-            $form = "router.php?componente=contatos&action=editar&id=".$id;
+            $form = "router.php?componente=contatos&action=editar&id=".$id."&foto=".$foto;
 
             // Destroi uma variavel da memoria do servidor
             unset($_SESSION['dadosContato']);
@@ -95,6 +100,11 @@ $form = (string) "router.php?componente=contatos&action=inserir";
                         <div class="cadastroEntradaDeDados">
                             <textarea name="txtObs" cols="50" rows="7"><?=isset($obs)?$obs:null?></textarea>
                         </div>
+                    </div>
+                    <div class="campos">
+                        <img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" alt="">
+                    </div>
+
                     </div> 
                     <div class="enviar">
                         <div class="enviar">
@@ -128,19 +138,21 @@ $form = (string) "router.php?componente=contatos&action=inserir";
                     // Estrutura de repetição para retornar ps dados do array e printar na tela
                     foreach ($listContato as $item)
                     {
+                        // Variavel para carregar a foto que veio do BD
+                        $foto = $item['foto'];
                 ?>
 
                 <tr id="tblLinhas">
                     <td class="tblColunas registros"><?=$item['nome']?></td>
                     <td class="tblColunas registros"><?=$item['celular']?></td>
                     <td class="tblColunas registros"><?=$item['email']?></td>
-                    <td class="tblColunas registros"><img src="arquivos/<?=$item['foto']?>" class="foto"></td>
+                    <td class="tblColunas registros"><img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" class="foto"></td>
                    
                     <td class="tblColunas registros">
                         <a href="router.php?componente=contatos&action=buscar&id=<?=$item['id']?>">
                             <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
                         </a>
-                        <a onclick="return confirm('Deseja realmente excluir este <?=$item['nome']?> contato?')" href="router.php?componente=contatos&action=deletar&id=<?=$item['id']?>">
+                        <a onclick="return confirm('Deseja realmente excluir este <?=$item['nome']?> contato?')" href="router.php?componente=contatos&action=deletar&id=<?=$item['id']?>&foto=<?=$foto?>">
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>
                             <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">

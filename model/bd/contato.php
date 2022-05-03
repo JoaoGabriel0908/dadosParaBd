@@ -63,7 +63,8 @@ function uptadeContato($dadosContato){
                 telefone       = '".$dadosContato['telefone']."',
                 celular        = '".$dadosContato['celular']."',
                 email          = '".$dadosContato['email']."',
-                obs            = '".$dadosContato['obs']."'
+                obs            = '".$dadosContato['obs']."',
+                foto           = '".$dadosContato['foto']."'
 
             where idcontato =".$dadosContato['id'];
              
@@ -143,6 +144,7 @@ function selectAllContato(){
     }
 
 }
+
 // Quando manda script insert, update e delect ele pergunta se uma linha foi afetada no Banco
 // O Select devolve os dados do Banco 
 
@@ -174,7 +176,8 @@ function selectByIdContato($id){
                 "telefone"      => $rsDados['telefone'],
                 "celular"       => $rsDados['celular'],
                 "email"         => $rsDados['email'],
-                "obs"           => $rsDados['obs']
+                "obs"           => $rsDados['obs'],
+                "foto"          => $rsDados['foto']
             );
         }
     }

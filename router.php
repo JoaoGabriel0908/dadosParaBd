@@ -69,9 +69,16 @@
                         // que foi enviado pela URL do link da imagem do exluir
                         // que foi adicionado na Index.
                         $idContato = $_GET['id'];
+                        $foto = $_GET['foto'];
+
+                        // Criamos um array para encaminhar os valores do id e da foto para a Controller
+                        $arrayDados = array (
+                            "id"        => $idContato,
+                            "foto"      => $foto
+                        );
 
                         // Chama a função de excluir na controller
-                        $resposta = excluirContato($idContato);
+                        $resposta = excluirContato($arrayDados);
 
                         if(is_bool($resposta))
                         {
@@ -121,8 +128,17 @@
                     // Recebe o id que foi encaminhado no action do form pela URL
                     $idContato = $_GET['id'];
 
+                    // Recebe o nome da foto que foi enviada pelo GET do from
+                    $foto = $_GET['foto'];
+
+                    $arrayDados = array (
+                        "id"    => $idContato,
+                        "foto"  => $foto,
+                        "file"  => $_FILES
+                    );
+
                     // Chama a função de editar na controller 
-                    $resposta = atualizarContato($_POST, $idContato);
+                    $resposta = atualizarContato($_POST, $arrayDados);
 
                     // Valida o tipo de dado que retornou
                     if(is_bool($resposta)) // Se for boleano:
