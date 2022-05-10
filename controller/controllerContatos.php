@@ -7,6 +7,9 @@
 * Versão: 1.0
 ***************************************************************/
 
+// Import do arquivo de configurção do projeto
+require_once('modulo/config.php');
+
 // Função para receber dados da View e encaminhar para a Model (Inserir)
 function inserirContato ($dadosContatos, $file){
 
@@ -17,7 +20,7 @@ function inserirContato ($dadosContatos, $file){
 
         // Validação de caixa vazia dos elementos nome,
         // celular e email, pois são campos obrigatórios no BD 
-        if(!empty($dadosContatos['txtNome']) && !empty($dadosContatos['txtCelular']) && !empty($dadosContatos['txtEmail']))
+        if(!empty($dadosContatos['txtNome']) && !empty($dadosContatos['txtCelular']) && !empty($dadosContatos['txtEmail']) && !empty($dadosContatos['sltEstado']))
             {
                 // Validação para identificar se chegou um arquivo para upload
                 if($file['fleFoto']['name'] != null)
@@ -47,16 +50,18 @@ function inserirContato ($dadosContatos, $file){
                     "celular"       => $dadosContatos['txtCelular'],
                     "email"         => $dadosContatos['txtEmail'],
                     "obs"           => $dadosContatos['txtObs'],
-                    "foto"          => $nomeFoto
+                    "foto"          => $nomeFoto,
+                    "idestado"      => $dadosContatos['sltEstado']
                 );
                 // Require do arquivo da model que faz a conexão direta com o BD
                 require_once('./model/bd/contato.php');
+
                 // Chama a função que fará o insert do BD (esta função está na model)
                 if (insertContato($arrayDados))
                     return true;
                 else
                     return array('idErro' => 1, 
-                                 'message' => 'Não foi poosível inserir os bancos de Dados');
+                                 'message' => 'Não foi possível inserir os bancos de Dados');
             }
         else
             return array('idErro' =>2,
@@ -66,6 +71,8 @@ function inserirContato ($dadosContatos, $file){
 
 // Função para receber dados da View e encaminhar para a Model (Atualizar)
 function atualizarContato ($dadosContatos, $arrayDados){
+
+    $statusUpload = (boolean) false;
 
     // Recebe o id anviado peloas ArraDados
     $id = $arrayDados['id'];
@@ -94,6 +101,8 @@ function atualizarContato ($dadosContatos, $arrayDados){
 
                         // Chama a função de upload
                         $novaFoto = uploadFile($file['fleFoto']);
+                        // Faz a alteração quando inserida uma nova foto
+                        $statusUpload = true;
                     } else {
                         // Permanece a mesma foto no BD
                         $novaFoto = $foto;
@@ -109,15 +118,22 @@ function atualizarContato ($dadosContatos, $arrayDados){
                         "celular"       => $dadosContatos['txtCelular'],
                         "email"         => $dadosContatos['txtEmail'],
                         "obs"           => $dadosContatos['txtObs'],
-                        "foto"          => $novaFoto
+                        "foto"          => $novaFoto,
+                        "idestado"      => $dadosContatos['sltEstado']
                     );
 
                     // Require do arquivo da model que faz a conexão direta com o BD
                     require_once('./model/bd/contato.php');
                     // Chama a função que fará o update do BD (esta função está na model)
                     if (uptadeContato($arrayDados)){
-                        unlink(DIRETORIO_FILE_UPLOAD.$foto);
-                        return true;
+                        // Validação para verificar se será necessário apagar a foto antiga
+                        // Essa variavel foi ativada na linha 102, quando realizamos o upload 
+                        // de uma nova foto para o servidor.
+                        if($statusUpload){
+                            // Apaga a foto antiga da pasta do servidor
+                            unlink(DIRETORIO_FILE_UPLOAD.$foto);
+                        }
+                            return true;
                     }
                     else
                         return array('idErro' => 1,

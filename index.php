@@ -8,6 +8,8 @@ $form = (string) "router.php?componente=contatos&action=inserir";
 
 // Variavel para carregar o nome da foto do banco de dados
 $foto = (string) null;
+// Variavel para ser utilizada no carregar dos estados
+$idestado = (string) null;
 
 // Valida se a utilização da variavel de sessão esta ativa no servidor
     if(session_status()){
@@ -20,6 +22,8 @@ $foto = (string) null;
             $email          = $_SESSION['dadosContato']['email'];
             $obs            = $_SESSION['dadosContato']['obs'];
             $foto           = $_SESSION['dadosContato']['foto'];
+            $idestado       = $_SESSION['dadosContato']['idestado'];
+
             // Mudamos a ação do form para editar o registro no click do botão
             // da ação salvar.
             $form = "router.php?componente=contatos&action=editar&id=".$id."&foto=".$foto;
@@ -60,7 +64,28 @@ $foto = (string) null;
                             <input type="text" name="txtNome" value="<?= isset($nome)?$nome:null?>" placeholder="Digite seu Nome" maxlength="100">
                         </div>
                     </div>
-                                     
+                    <div class="campos">
+                        <div class="cadastroInformacoesPessoais">
+                            <label> Estado: </label>
+                        </div>
+                        <div class="cadastroEntradaDeDados">
+                            <select name="sltEstado" id="">
+                                <option value="">Selecione um item</option>
+                                <?php
+                                // Import da controller de estado
+                                    require_once('controller/controllerEstados.php');
+                                    $listEstados = listarEstado();
+                                    // Chama a função para carregar todos os estados no BD
+                                    foreach ($listEstados as $item)
+                                    {
+                                        ?>
+                                            <option <?=$idestado==$item['idestado']?'selected':null?> value="<?=$item['idestado']?>"><?=$item['sigla']?></option>
+                                        <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>           
                     <div class="campos">
                         <div class="cadastroInformacoesPessoais">
                             <label> Telefone: </label>
@@ -135,11 +160,13 @@ $foto = (string) null;
                     // Chama a função que vai retornar os dados de contatos
                     $listContato = listarContato();
 
-                    // Estrutura de repetição para retornar ps dados do array e printar na tela
-                    foreach ($listContato as $item)
-                    {
-                        // Variavel para carregar a foto que veio do BD
-                        $foto = $item['foto'];
+                    if($listContato = listarContato()){
+
+                        // Estrutura de repetição para retornar ps dados do array e printar na tela
+                        foreach ($listContato as $item)
+                        {
+                            // Variavel para carregar a foto que veio do BD
+                            $foto = $item['foto'];
                 ?>
 
                 <tr id="tblLinhas">
@@ -160,6 +187,7 @@ $foto = (string) null;
                 </tr>
                 <?php
                 }
+            }
                 ?>
             </table>
         </div>

@@ -25,16 +25,17 @@ function insertContato($dadosContato){
              celular,
              email,
              obs,
-             foto)
+             foto,
+             idestado)
         values
             ('".$dadosContato['nome']."',
             '".$dadosContato['telefone']."',
             '".$dadosContato['celular']."',
             '".$dadosContato['email']."',
             '".$dadosContato['obs']."',
-            '".$dadosContato['foto']."');";
-
-            echo($sql);
+            '".$dadosContato['foto']."',
+            '".$dadosContato['idestado']."'
+        );";
 
     // Comando que executa o script no banco de dados
         // Validação para verificar se o script sql está correto 
@@ -64,7 +65,8 @@ function uptadeContato($dadosContato){
                 celular        = '".$dadosContato['celular']."',
                 email          = '".$dadosContato['email']."',
                 obs            = '".$dadosContato['obs']."',
-                foto           = '".$dadosContato['foto']."'
+                foto           = '".$dadosContato['foto']."',
+                idestado       = '".$dadosContato['idestado']."'
 
             where idcontato =".$dadosContato['id'];
              
@@ -132,7 +134,8 @@ function selectAllContato(){
                 "celular"       => $rsDados['celular'],
                 "email"         => $rsDados['email'],
                 "obs"           => $rsDados['obs'],
-                "foto"          => $rsDados['foto']
+                "foto"          => $rsDados['foto'],
+                "idestado"          => $rsDados['idestado']
             );
             $cont++;
         }
@@ -140,7 +143,10 @@ function selectAllContato(){
         // Solicita o fechamento da conexão com o Banco de Dados
         fecharConexaoMysql($conexao);
 
-        return $arrayDados;
+        if(isset($arrayDados)){
+            return $arrayDados;
+        } else 
+            return false;
     }
 
 }
@@ -177,7 +183,8 @@ function selectByIdContato($id){
                 "celular"       => $rsDados['celular'],
                 "email"         => $rsDados['email'],
                 "obs"           => $rsDados['obs'],
-                "foto"          => $rsDados['foto']
+                "foto"          => $rsDados['foto'],
+                "idestado"      => $rsDados['idestado']
             );
         }
     }
@@ -185,7 +192,6 @@ function selectByIdContato($id){
         fecharConexaoMysql($conexao);
 
         return $arrayDados;
-    
 }
 
 ?>
