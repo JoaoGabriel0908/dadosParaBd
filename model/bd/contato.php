@@ -69,7 +69,8 @@ function uptadeContato($dadosContato){
                 idestado       = '".$dadosContato['idestado']."'
 
             where idcontato =".$dadosContato['id'];
-             
+
+           
     // Comando que executa o script no banco de dados
         // Validação para verificar se o script sql está correto 
     if (mysqli_query($conexao, $sql)){
@@ -135,7 +136,7 @@ function selectAllContato(){
                 "email"         => $rsDados['email'],
                 "obs"           => $rsDados['obs'],
                 "foto"          => $rsDados['foto'],
-                "idestado"          => $rsDados['idestado']
+                "idestado"      => $rsDados['idestado']
             );
             $cont++;
         }
