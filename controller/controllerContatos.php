@@ -11,7 +11,7 @@
 require_once(SRC.'modulo/config.php');
 
 // Função para receber dados da View e encaminhar para a Model (Inserir)
-function inserirContato ($dadosContatos, $file){
+function inserirContato ($dadosContatos){
 
     $nomeFoto = (string) null;
 
@@ -20,15 +20,17 @@ function inserirContato ($dadosContatos, $file){
 
         // Validação de caixa vazia dos elementos nome,
         // celular e email, pois são campos obrigatórios no BD 
-        if(!empty($dadosContatos['txtNome']) && !empty($dadosContatos['txtCelular']) && !empty($dadosContatos['txtEmail']) && !empty($dadosContatos['sltEstado']))
+        if(!empty($dadosContatos[0]['nome']) && !empty($dadosContatos[0]['celular']) && !empty($dadosContatos[0]['email']) && !empty($dadosContatos[0]['estado']))
             {
+                // Recebe o objeto imagem que foi encaminhado dentro do array
+                $file = $dadosContatos['file'];
                 // Validação para identificar se chegou um arquivo para upload
-                if($file['fleFoto']['name'] != null)
+                if($file['foto']['name'] != null)
                 {
                     // Import da função de upload
-                    require_once('modulo/upload.php');
+                    require_once(SRC.'modulo/upload.php');
                     // Chama a função de upload
-                    $nomeFoto = uploadFile($file['fleFoto']);
+                    $nomeFoto = uploadFile($file['foto']);
 
                     // Chama a função de upload
                     if(is_array($nomeFoto))
@@ -45,16 +47,16 @@ function inserirContato ($dadosContatos, $file){
                 // criar este array conforme as necessidades de manipulação do BD
                 // OBS: Criar as chaves do array conforme os nomes dos atributos do BD
                 $arrayDados = array(
-                    "nome"          => $dadosContatos['txtNome'],
-                    "telefone"      => $dadosContatos['txtTelefone'],
-                    "celular"       => $dadosContatos['txtCelular'],
-                    "email"         => $dadosContatos['txtEmail'],
-                    "obs"           => $dadosContatos['txtObs'],
+                    "nome"          => $dadosContatos[0]['nome'],
+                    "telefone"      => $dadosContatos[0]['telefone'],
+                    "celular"       => $dadosContatos[0]['celular'],
+                    "email"         => $dadosContatos[0]['email'],
+                    "obs"           => $dadosContatos[0]['obs'],
                     "foto"          => $nomeFoto,
-                    "idestado"      => $dadosContatos['sltEstado']
+                    "idestado"      => $dadosContatos[0]['estado']
                 );
                 // Require do arquivo da model que faz a conexão direta com o BD
-                require_once('./model/bd/contato.php');
+                require_once(SRC.'model/bd/contato.php');
 
                 // Chama a função que fará o insert do BD (esta função está na model)
                 if (insertContato($arrayDados))
